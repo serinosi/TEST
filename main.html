@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page - People Directory</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .search-container {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-bar:focus {
+            border-color: #667eea;
+        }
+
+        .results {
+            margin-top: 20px;
+        }
+
+        .person-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        .person-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .person-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .person-number {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            margin-top: 20px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 People Directory</h1>
+        
+
+        
+        <div class="search-container">
+            <input type="text" class="search-bar" placeholder="Search people by name..." oninput="searchPeople(this.value)">
+        </div>
+        
+        <div class="results" id="results">
+            <div class="no-results">Start typing to search for people...</div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data - in a real app, this could come from a JSON file or API
+        let people = [
+            { name: "John", surname: "Doe", number: 1001 },
+            { name: "Jane", surname: "Smith", number: 1002 },
+            { name: "Mike", surname: "Johnson", number: 1003 },
+            { name: "Sarah", surname: "Williams", number: 1004 },
+            { name: "David", surname: "Brown", number: 1005 }
+        ];
+
+        // Search functionality
+        function searchPeople(query) {
+            const resultsDiv = document.getElementById('results');
+            
+            if (!query.trim()) {
+                displayAllPeople();
+                return;
+            }
+
+            const filteredPeople = people.filter(person => 
+                person.name.toLowerCase().includes(query.toLowerCase()) ||
+                person.surname.toLowerCase().includes(query.toLowerCase())
+            );
+
+            if (filteredPeople.length === 0) {
+                resultsDiv.innerHTML = '<div class="no-results">No people found matching your search.</div>';
+                return;
+            }
+
+            resultsDiv.innerHTML = filteredPeople.map(person => `
+                <div class="person-card" onclick="openPersonPage('${person.name.toLowerCase()}_${person.surname.toLowerCase()}')">
+                    <div class="person-name">${person.name} ${person.surname}</div>
+                    <div class="person-number">ID: ${person.number}</div>
+                </div>
+            `).join('');
+        }
+
+        // Open person page
+        function openPersonPage(personId) {
+            window.location.href = personId + '.html';
+        }
+
+        // Initialize - show all people by default
+        window.onload = function() {
+            displayAllPeople();
+        };
+
+        // Display all people
+        function displayAllPeople() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = people.map(person => `
+                <div class="person-card" onclick="openPersonPage('${person.name.toLowerCase()}_${person.surname.toLowerCase()}')">
+                    <div class="person-name">${person.name} ${person.surname}</div>
+                    <div class="person-number">ID: ${person.number}</div>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
